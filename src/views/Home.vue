@@ -8,6 +8,7 @@
 import { ref, onMounted } from 'vue'
 import { getHomeAllData } from '@/network/home.js'
 
+
 export default {
   name: 'Home',
   setup() {
