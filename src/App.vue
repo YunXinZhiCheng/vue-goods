@@ -7,6 +7,9 @@
 </template>
 
 <style lang="less">
+// 引入全局样式
+@import 'assets/css/base.css';
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
