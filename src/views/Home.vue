@@ -1,18 +1,33 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    {{ banner }}
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import { ref, onMounted } from 'vue'
+import { getHomeAllData } from '@/network/home.js'
 
 export default {
   name: 'Home',
-  components: {
-    HelloWorld
-  }
+  setup() {
+    // 轮播图数据
+    const banner = ref([])
+
+    // 生命周期：异步获取网络请求
+    onMounted(() => {
+      getHomeAllData()
+        .then((res) => {
+          console.log(res)
+          banner.value = res.slides
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    })
+    return {
+      banner,
+    }
+  },
 }
 </script>
