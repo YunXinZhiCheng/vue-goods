@@ -12,9 +12,49 @@
     </div>
 
     <!-- 推荐商品：子组件
-         父传子：
+         父传子：传递推荐
      -->
     <RecommendView :recommends="recommends" />
+
+    <!-- 选项卡：子组件
+        父传子:传递一个数组
+        子传父:@自定义事件
+     -->
+    <TabControl :titles="['畅销', '新书', '精选']" @tabClick="tabClick" />
+
+    <!-- 显示数据 -->
+    {{ temid }}
+    <br />
+    {{ temid }}
+    <br />
+    {{ temid }}
+    <br />
+    {{ temid }}
+    <br />
+    {{ temid }}
+    <br />
+    {{ temid }}
+    <br />
+    {{ temid }}
+    <br />
+    {{ temid }}
+    <br />
+    {{ temid }}
+    <br />
+    {{ temid }}
+    <br />
+    {{ temid }}
+    <br />
+    {{ temid }}
+    <br />
+    {{ temid }}
+    <br />
+    {{ temid }}
+    <br />
+    {{ temid }}
+    <br />
+    {{ temid }}
+    <br />
   </div>
 </template>
 
@@ -22,7 +62,8 @@
 // 引入组件
 import NavBar from '@/components/common/navbar/NavBar'
 import RecommendView from '@/views/home/ChildComps/RecommendView'
-import { ref, onMounted, toRefs } from 'vue'
+import TabControl from '@/components/content/tabControl/TabControl'
+import { ref, onMounted } from 'vue'
 
 //引入首页接口函数
 import { getHomeAllData } from '@/network/home.js'
@@ -31,12 +72,15 @@ export default {
   components: {
     NavBar,
     RecommendView,
+    TabControl,
   },
   setup() {
     // 轮播图数据
     const banner = ref([])
     // 推荐商品数据
     const recommends = ref([])
+    // 临时变量
+    let temid = ref(0)
 
     // 生命周期：异步获取网络请求
     onMounted(() => {
@@ -50,9 +94,18 @@ export default {
           console.log(err)
         })
     })
+
+    // 自定义事件
+    const tabClick = (index) => {
+      // 选择类型
+      temid.value = index
+    }
+
     return {
       banner,
       recommends,
+      tabClick,
+      temid,
     }
   },
 }
