@@ -22,42 +22,10 @@
      -->
     <TabControl :titles="['畅销', '新书', '精选']" @tabClick="tabClick" />
 
-    <!-- 商品列表：子组件 -->
-    <GoodsList />
-
-    <!-- 显示数据 -->
-    {{ temid }}
-    <br />
-    {{ temid }}
-    <br />
-    {{ temid }}
-    <br />
-    {{ temid }}
-    <br />
-    {{ temid }}
-    <br />
-    {{ temid }}
-    <br />
-    {{ temid }}
-    <br />
-    {{ temid }}
-    <br />
-    {{ temid }}
-    <br />
-    {{ temid }}
-    <br />
-    {{ temid }}
-    <br />
-    {{ temid }}
-    <br />
-    {{ temid }}
-    <br />
-    {{ temid }}
-    <br />
-    {{ temid }}
-    <br />
-    {{ temid }}
-    <br />
+    <!-- 商品列表：子组件
+         父传子：传递当前显示商品
+     -->
+    <GoodsList :goods="showGoods" />
   </div>
 </template>
 
@@ -67,10 +35,10 @@ import NavBar from '@/components/common/navbar/NavBar'
 import RecommendView from '@/views/home/ChildComps/RecommendView'
 import TabControl from '@/components/content/tabControl/TabControl'
 import GoodsList from '@/components/content/goods/GoodsList'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, reactive, computed } from 'vue'
 
 //引入首页接口函数
-import { getHomeAllData } from '@/network/home.js'
+import { getHomeAllData, getHomeGoods } from '@/network/home.js'
 export default {
   // 首页组件
   name: 'Home',
@@ -85,33 +53,63 @@ export default {
     const banner = ref([])
     // 推荐商品数据
     const recommends = ref([])
-    // 临时变量
-    let temid = ref(0)
+
+    // 商品列表数据模型：reactive
+    const goods = reactive({
+      sales: { page: 0, list: [] },
+      new: { page: 0, list: [] },
+      recommend: { page: 0, list: [] },
+    })
+
+    // 当前类型
+    let currentType = ref('sales')
+
+    // 显示当前商品：计算属性
+    const showGoods = computed(() => {
+      return goods[currentType.value].list
+    })
 
     // 生命周期：异步获取网络请求
     onMounted(() => {
-      getHomeAllData()
+      // 首页数据
+      getHomeAllData().then((res) => {
+        // console.log(res)
+        banner.value = res.slides
+        recommends.value = res.goods.data
+      })
+
+      // 商品列表数据：畅销
+      getHomeGoods('sales').then((res) => {
+        goods.sales.list = res.goods.data
+      })
+      // 商品新品数据：新书
+      getHomeGoods('new')
         .then((res) => {
-          console.log(res)
-          banner.value = res.slides
-          recommends.value = res.goods.data
+          goods.new.list = res.goods.data
         })
         .catch((err) => {
           console.log(err)
         })
+      // 商品推荐数据：精选
+      getHomeGoods('recommend').then((res) => {
+        goods.recommend.list = res.goods.data
+      })
+
+      // console.log(goods)
     })
 
     // 自定义事件
     const tabClick = (index) => {
       // 选择类型
-      temid.value = index
+      let types = ['sales', 'new', 'recommend']
+      currentType.value = types[index]
     }
 
     return {
       banner,
       recommends,
       tabClick,
-      temid,
+      showGoods,
     }
   },
 }

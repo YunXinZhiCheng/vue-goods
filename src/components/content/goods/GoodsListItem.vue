@@ -1,12 +1,14 @@
 <template>
   <div class="goods-item">
     <!-- 商品图片 -->
-    <img src="@/assets/images/11.png" alt="" />
+    <img :src="product.cover_url" alt="" />
     <!-- 商品信息：标题+价格+收藏 -->
     <div class="goods-info">
-      <p>标题</p>
-      <span class="price"><small>￥99</small></span>
-      <span class="collect">3</span>
+      <p>{{ product.title }}</p>
+      <span class="price">
+        <small>{{ product.price }}</small>
+      </span>
+      <span class="collect">{{ product.collects_count }}</span>
     </div>
   </div>
 </template>
@@ -15,6 +17,15 @@
 export default {
   // 商品列表项组件
   name: 'GoodsListItem',
+  // 接收商品属性
+  props: {
+    product: {
+      type: Object,
+      default() {
+        return {}
+      },
+    },
+  },
 }
 </script>
 

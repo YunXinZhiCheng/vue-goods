@@ -1,11 +1,6 @@
 <template>
   <div class="goods">
-    <GoodsListItem />
-    <GoodsListItem />
-    <GoodsListItem />
-    <GoodsListItem />
-    <GoodsListItem />
-    <GoodsListItem />
+    <GoodsListItem v-for="item in goods" :key="item.id" :product="item" />
   </div>
 </template>
 
@@ -16,6 +11,14 @@ export default {
   name: 'GoodsList',
   components: {
     GoodsListItem,
+  },
+  props: {
+    goods: {
+      type: Array,
+      default() {
+        return []
+      },
+    },
   },
 }
 </script>
