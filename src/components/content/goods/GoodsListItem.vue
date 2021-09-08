@@ -1,7 +1,8 @@
 <template>
   <div class="goods-item">
-    <!-- 商品图片 -->
-    <img :src="product.cover_url" alt="" />
+    <!-- 商品图片: 图片懒加载-->
+    <img v-lazy="product.cover_url" alt="" />
+    
     <!-- 商品信息：标题+价格+收藏 -->
     <div class="goods-info">
       <p>{{ product.title }}</p>

@@ -6,7 +6,8 @@
     indicator-color="white"
   >
     <van-swipe-item v-for="(item, index) in banners.slice(0, 5)" :key="index">
-      <img :src="item.img_url" alt="" />
+      <!-- 图片懒加载 -->
+      <img v-lazy="item.img_url" alt="" />
     </van-swipe-item>
   </van-swipe>
 </template>

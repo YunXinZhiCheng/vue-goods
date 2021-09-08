@@ -10,7 +10,8 @@
       :key="item.id"
     >
       <a href="" @click.prevent="goD(item.id)">
-        <img :src="item.cover_url" alt="" />
+        <!-- 图片懒加载 -->
+        <img v-lazy="item.cover_url" alt="" />
         <div>{{ item.title }}</div>
       </a>
     </div>
