@@ -16,8 +16,8 @@
     <div class="wrapper">
       <div class="content">
         <!-- 轮播图 -->
-        <div class="banners">
-          <img src="@/assets/images/1.png" alt="" />
+        <div class="banref">
+          <HomeSwiper :banners="banners"  style="margin-top:45px;"/>
         </div>
 
         <!-- 推荐商品：子组件 父传子：传递推荐 -->
@@ -43,6 +43,7 @@ import RecommendView from '@/views/home/ChildComps/RecommendView'
 import TabControl from '@/components/content/tabControl/TabControl'
 import GoodsList from '@/components/content/goods/GoodsList'
 import BackTop from '@/components/common/backtop/BackTop'
+import HomeSwiper from '@/views/home/ChildComps/HomeSwiper'
 
 // 引入Vue相关
 import { ref, onMounted, reactive, computed, watchEffect, nextTick } from 'vue'
@@ -61,6 +62,7 @@ export default {
     TabControl,
     GoodsList,
     BackTop,
+    HomeSwiper,
   },
   setup() {
     let isTabFixed = ref(false)
@@ -92,6 +94,7 @@ export default {
       getHomeAllData().then((res) => {
         recommends.value = res.goods.data
         banners.value = res.slides
+        console.log(res.slides);
       })
       // 首页商品列表-畅销
       getHomeGoods('sales').then((res) => {
