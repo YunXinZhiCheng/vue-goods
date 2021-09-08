@@ -22,6 +22,9 @@
      -->
     <TabControl :titles="['畅销', '新书', '精选']" @tabClick="tabClick" />
 
+    <!-- 商品列表：子组件 -->
+    <GoodsList />
+
     <!-- 显示数据 -->
     {{ temid }}
     <br />
@@ -63,16 +66,19 @@
 import NavBar from '@/components/common/navbar/NavBar'
 import RecommendView from '@/views/home/ChildComps/RecommendView'
 import TabControl from '@/components/content/tabControl/TabControl'
+import GoodsList from '@/components/content/goods/GoodsList'
 import { ref, onMounted } from 'vue'
 
 //引入首页接口函数
 import { getHomeAllData } from '@/network/home.js'
 export default {
+  // 首页组件
   name: 'Home',
   components: {
     NavBar,
     RecommendView,
     TabControl,
+    GoodsList,
   },
   setup() {
     // 轮播图数据

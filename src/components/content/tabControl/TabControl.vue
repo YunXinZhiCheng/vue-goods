@@ -56,6 +56,8 @@ export default {
   // 定位
   position: sticky;
   top: 44px;
+  // 层次
+  z-index: 10;
 
   .tab-control-item {
     flex: 1;
