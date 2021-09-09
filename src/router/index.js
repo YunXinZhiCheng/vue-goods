@@ -6,6 +6,8 @@ const Detail = () => import('../views/detail/Detail.vue')
 const Profile = () => import('../views/profile/Profile.vue')
 const ShopCart = () => import('../views/shopcart/ShopCart.vue')
 
+const Register =()=>import('../views/profile/Register.vue')
+
 const routes = [
   {
     path: '',
@@ -59,6 +61,15 @@ const routes = [
     // 导航守卫
     meta: {
       title: '图书兄弟-个人中心',
+    },
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: Register,
+    // 导航守卫
+    meta: {
+      title: '图书兄弟-用户注册',
     },
   },
 ]

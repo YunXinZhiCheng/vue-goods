@@ -1,6 +1,6 @@
 <template>
   <div>
-   <NavBar>
+    <NavBar>
       <!-- 为插槽添加内容 -->
       <template v-slot:default>个人中心</template>
     </NavBar>
