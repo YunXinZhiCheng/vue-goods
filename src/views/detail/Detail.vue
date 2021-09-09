@@ -40,7 +40,9 @@
       </van-tab>
       <van-tab title="热评">
         <!-- 待开发功能 -->
+        <van-empty description="描述文字" />
       </van-tab>
+      
       <van-tab title="相关图书">
         <!-- 图书列表组件: 父传子 -->
         <GoodsList :goods="like_goods" />
