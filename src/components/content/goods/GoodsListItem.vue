@@ -1,31 +1,41 @@
 <template>
-  <div class="goods-item">
+  <div class="goods-item" @click="itemClick">
     <!-- 商品图片: 图片懒加载-->
     <img v-lazy="product.cover_url" alt="" />
-    
+
     <!-- 商品信息：标题+价格+收藏 -->
     <div class="goods-info">
       <p>{{ product.title }}</p>
       <span class="price">
-        <small>{{ product.price }}</small>
+        <small>￥</small>
+        {{ product.price }}
       </span>
-      <span class="collect">{{ product.collects_count }}</span>
+      <span class="collect">收藏:{{ product.collects_count }}</span>
     </div>
   </div>
 </template>
 
 <script>
+// 导入路由
+import { useRouter } from 'vue-router'
 export default {
   // 商品列表项组件
   name: 'GoodsListItem',
   // 接收商品属性
   props: {
-    product: {
-      type: Object,
-      default() {
-        return {}
-      },
+    product: Object,
+    default() {
+      return {}
     },
+  },
+  setup(props) {
+    const router = useRouter()
+
+    return {
+      itemClick: () => {
+        router.push({ path: '/detail', query: { id: props.product.id } })
+      },
+    }
   },
 }
 </script>
@@ -65,19 +75,17 @@ export default {
       color: red;
       margin-right: 20px;
     }
-    .collect {
+     .collect {
       position: relative;
-      // 添加伪元素: 收藏图标
-      &::before {
-        content: '';
-        // 绝对定位
-        position: absolute;
-        left: -15px;
-        width: 14px;
-        height: 14px;
-        top: -1px;
-        background: url('../../../assets/images/collect.png') 0 0/14px 14px;
-      }
+    }
+    .collect::before {
+      content: '';
+      position: absolute;
+      left: -15px;
+      width: 14px;
+      height: 14px;
+      top: -1px;
+      background: url('~assets/images/collect.png') 0 0/14px 14px;
     }
   }
 }

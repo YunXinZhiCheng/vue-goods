@@ -50,6 +50,7 @@
             :title="item.title"
             :thumb="item.cover_url"
             :lazy-load="true"
+            @click="itemClick(item.id)"
           />
         </div>
       </div>
@@ -64,6 +65,7 @@ import NavBar from '@/components/common/navbar/NavBar'
 import BackTop from '@/components/common/backtop/BackTop'
 import { ref, reactive, onMounted, computed, watchEffect, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
+
 // 引入分类接口函数
 import { getCategory, getCategoryGoods } from '@/network/category.js'
 // 引入滚动条插件
@@ -160,7 +162,7 @@ export default {
 
       // 上拉加载数据,触发pullingUp
       bscroll.on('pullingUp', () => {
-        console.log('上拉加载更多.....')
+        // console.log('上拉加载更多.....')
 
         const page = goods[currentOrder.value].page + 1
 
@@ -177,10 +179,10 @@ export default {
           // 重新计算高度
           bscroll && bscroll.refresh()
         })
-        console.log(
-          'contentheight:' + document.querySelector('.content').clientHeight
-        )
-        console.log('当前类型:' + currentOrder.value + ',当前页：' + page)
+        // console.log(
+        //   'contentheight:' + document.querySelector('.content').clientHeight
+        // )
+        // console.log('当前类型:' + currentOrder.value + ',当前页：' + page)
       })
     })
 
@@ -210,6 +212,10 @@ export default {
       isShowBackTop,
       bscroll,
       bTop,
+      itemClick: (id) => {
+        console.log(id)
+        router.push({ path: '/detail', query: { id } })
+      },
     }
   },
 }
