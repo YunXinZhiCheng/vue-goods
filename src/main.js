@@ -5,7 +5,7 @@ import store from './store'
 
 // 导入Vant样式
 import 'vant/lib/index.css'
-// 导入Vant组件：按需引入 轮播图 懒加载 徽标 侧边导航 折叠面板 标签页 商品卡片
+// 导入Vant组件：按需引入 轮播图 懒加载 徽标 侧边导航 折叠面板 标签页 商品卡片 图片 标签 按钮
 import {
   Swipe,
   SwipeItem,
@@ -18,6 +18,9 @@ import {
   Tab,
   Tabs,
   Card,
+  Image as VanImage,
+  Tag,
+  Button,
 } from 'vant'
 
 createApp(App)
@@ -36,4 +39,7 @@ createApp(App)
   .use(Tab)
   .use(Tabs)
   .use(Card)
+  .use(VanImage)
+  .use(Tag)
+  .use(Button)
   .mount('#app')
