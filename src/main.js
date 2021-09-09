@@ -5,8 +5,17 @@ import store from './store'
 
 // 导入Vant样式
 import 'vant/lib/index.css'
-// 导入Vant组件：按需引入 轮播图 懒加载 徽标
-import { Swipe, SwipeItem, Lazyload, Badge } from 'vant'
+// 导入Vant组件：按需引入 轮播图 懒加载 徽标 侧边导航 折叠面板
+import {
+  Swipe,
+  SwipeItem,
+  Lazyload,
+  Badge,
+  Sidebar,
+  SidebarItem,
+  Collapse,
+  CollapseItem,
+} from 'vant'
 
 createApp(App)
   .use(store)
@@ -17,4 +26,8 @@ createApp(App)
     loading: require('./assets/images/default.png'),
   })
   .use(Badge)
+  .use(Sidebar)
+  .use(SidebarItem)
+  .use(Collapse)
+  .use(CollapseItem)
   .mount('#app')

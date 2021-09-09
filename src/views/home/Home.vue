@@ -103,7 +103,7 @@ export default {
 
       // 首页商品列表-新书
       getHomeGoods('new').then((res) => {
-        goods.new.list = res.goods.data
+        goods.new.list = res.goods.data.slice(0,1)
       })
 
       // 首页商品列表-精选
