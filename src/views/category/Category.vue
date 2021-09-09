@@ -11,7 +11,7 @@
         <van-tabs v-model:active="active" @click="tabClick">
           <van-tab title="销量排序"></van-tab>
           <van-tab title="价格排序"></van-tab>
-          <van-tab title="评化排序"></van-tab>
+          <van-tab title="评论排序"></van-tab>
         </van-tabs>
       </div>
 
@@ -38,32 +38,20 @@
 
       <!-- 右边商品列表 -->
       <div class="goodslist">
-        <!-- 商品卡片组件 -->
-        <van-card
-          num="2"
-          tag="标签"
-          price="2.00"
-          desc="描述信息"
-          title="商品标题"
-          thumb="https://img.yzcdn.cn/vant/ipad.jpeg"
-          origin-price="10.00"
-        />
-        <van-card
-          num="2"
-          price="2.00"
-          desc="描述信息"
-          title="商品标题"
-          thumb="https://img.yzcdn.cn/vant/ipad.jpeg"
-          origin-price="10.00"
-        />
-        <van-card
-          num="2"
-          price="2.00"
-          desc="描述信息"
-          title="商品标题"
-          thumb="https://img.yzcdn.cn/vant/ipad.jpeg"
-          origin-price="10.00"
-        />
+        <div class="content">
+          <!-- 商品卡片组件 -->
+          <van-card
+            v-for="item in showGoods"
+            :key="item.id"
+            :num="item.comments_count"
+            :tag="item.comments_count >= 0 ? '流行' : '标签'"
+            :price="item.price"
+            :desc="item.updated_at"
+            :title="item.title"
+            :thumb="item.cover_url"
+            :lazy-load="true"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -71,9 +59,9 @@
 
 <script>
 import NavBar from '@/components/common/navbar/NavBar'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref, reactive } from 'vue'
 // 引入分类接口函数
-import { getCategory } from '@/network/category.js'
+import { getCategory, getCategoryGoods } from '@/network/category.js'
 export default {
   // 商品分类组件
   name: 'Category',
@@ -86,10 +74,63 @@ export default {
     let activeNames = ref(['1']) // 面板数组格式
     let categories = ref([]) // 分类数据默认：[]
 
-    // 当前排序的条件默认：销量
-    let currentOrder = ref(['sales'])
-    // 当前的分类id
-    let currentCid = ref(0)
+    let currentOrder = ref(['sales']) // 当前排序的条件默认：销量
+    let currentCid = ref(0) // 当前的分类id
+
+    // 数据模型
+    const goods = reactive({
+      sales: {
+        page: 1,
+        list: [],
+      },
+      price: {
+        page: 1,
+        list: [],
+      },
+      comments_count: {
+        page: 1,
+        list: [],
+      },
+    })
+
+    // 排序选项卡
+    const tabClick = (index) => {
+      let orders = ['sales', 'price', 'comments_count'] // 排序的数组
+
+      currentOrder.value = orders[index] // 当前排序
+
+      getCategoryGoods(currentOrder.value, currentCid.value).then((res) => {
+        goods[currentOrder.value].list = res.goods.data
+      })
+      console.log('当前分类的id:' + currentCid.value)
+      console.log('排序的序号:' + currentOrder.value)
+    }
+    // 通过分类得到商品
+    const getGoods = (cid) => {
+      currentCid.value = cid
+      init()
+      console.log('当前分类的id:' + currentCid.value)
+      console.log('排序的序号:' + currentOrder.value)
+    }
+    // 通过计算属性显示商品
+    const showGoods = computed(() => {
+      return goods[currentOrder.value].list
+    })
+
+    // 初始化方法
+    const init = () => {
+      getCategoryGoods('sales', currentCid.value).then((res) => {
+        goods.sales.list = res.goods.data
+      })
+
+      getCategoryGoods('price', currentCid.value).then((res) => {
+        goods.price.list = res.goods.data
+      })
+
+      getCategoryGoods('comments_count', currentCid.value).then((res) => {
+        goods.comments_count.list = res.goods.data
+      })
+    }
 
     // 网络请求
     onMounted(() => {
@@ -98,25 +139,9 @@ export default {
         console.log(res)
         categories.value = res.categories
       })
+      // 商品初始化
+      init()
     })
-
-    // 排序选项卡
-    const tabClick = (index) => {
-      // console.log('排序的序号：' + index)
-      let orders = ['sales', 'price', 'comments_count'] // 排序的数组
-      console.log('排序的序号：' + orders[index])
-      currentOrder.value = orders[index] // 当前排序
-
-      console.log('当前分类的id:' + currentCid.value)
-      console.log('排序的序号:' + currentOrder.value)
-    }
-    // 通过分类得到商品
-    const getGoods = (cid) => {
-      currentCid.value = cid
-      
-      console.log('当前分类的id:' + currentCid.value)
-      console.log('排序的序号:' + currentOrder.value)
-    }
 
     return {
       active,
@@ -126,6 +151,9 @@ export default {
       tabClick,
       currentCid,
       getGoods,
+      goods,
+      showGoods,
+      init,
     }
   },
 }
@@ -138,33 +166,36 @@ export default {
   .ordertab {
     flex: 1;
     float: right;
-    // background: #333;
     height: 50px;
     z-index: 9;
-    // 固定定位
     position: fixed;
     top: 45px;
     right: 0;
     left: 130px;
   }
+
   .leftmenu {
-    // 固定定位
     position: fixed;
     top: 95px;
     left: 0;
-    // background: #666;
     width: 130px;
   }
+
   .goodslist {
     flex: 1;
-    // background: #999;
-    // 绝对定位
     position: absolute;
     top: 100px;
     left: 130px;
     right: 0;
     height: 100vh;
     padding: 10px;
+    text-align: left !important;
+    .content {
+    }
   }
+}
+
+.van-card__thumb {
+  width: 68px !important;
 }
 </style>
