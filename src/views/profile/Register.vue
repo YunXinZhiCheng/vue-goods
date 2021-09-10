@@ -5,7 +5,7 @@
       <template v-slot:default>新用户注册</template>
     </NavBar>
 
-    <!--  -->
+    <!-- 注册布局 -->
     <div style="margin-top:45px">
       <div style="text-align:center; padding-top: 30px;">
         <!-- 图片组件 -->
@@ -33,7 +33,7 @@
               name="密码"
               label="密码"
               placeholder="密码"
-              :rules="[{ required: true, message: '请填写密码' }]"
+              :rules="[{ required: true, message: '请填写密码,不能少于6位' }]"
             />
             <!-- 确认密码 -->
             <van-field
@@ -53,6 +53,12 @@
               :rules="[{ required: true, message: '请填写电子邮箱' }]"
             />
           </van-cell-group>
+          <!-- 立即登录 -->
+          <div style="margin:16px">
+            <div class="link-login" @click="$router.push({ path: '/login' })">
+              已有账号，立即登录
+            </div>
+          </div>
           <!-- 提交 -->
           <div style="margin: 16px;">
             <van-button
@@ -62,7 +68,7 @@
               native-type="submit"
               color="#42b983"
             >
-              提交
+              注册
             </van-button>
           </div>
         </van-form>
@@ -136,4 +142,13 @@ export default {
 }
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+// 立即登录的样式
+.link-login {
+  font-size: 14px;
+  margin-bottom: 20px;
+  color: #42b983;
+  display: inline-block;
+  float: right;
+}
+</style>

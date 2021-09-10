@@ -6,7 +6,8 @@ const Detail = () => import('../views/detail/Detail.vue')
 const Profile = () => import('../views/profile/Profile.vue')
 const ShopCart = () => import('../views/shopcart/ShopCart.vue')
 
-const Register =()=>import('../views/profile/Register.vue')
+const Register = () => import('../views/profile/Register.vue')
+const Login = () => import('../views/profile/Login.vue')
 
 const routes = [
   {
@@ -61,6 +62,15 @@ const routes = [
     // 导航守卫
     meta: {
       title: '图书兄弟-个人中心',
+    },
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login,
+    // 导航守卫
+    meta: {
+      title: '图书兄弟-用户登录',
     },
   },
   {
