@@ -27,8 +27,10 @@
       </template>
       <!-- 按钮 -->
       <template #footer>
-        <van-button type="warning">加入购物车</van-button>
-        <van-button type="danger">立即购买</van-button>
+        <van-button type="warning" @click="handleAddCart">
+          加入购物车
+        </van-button>
+        <van-button type="danger" @click="goToCart">立即购买</van-button>
       </template>
     </van-card>
 
@@ -42,7 +44,7 @@
         <!-- 待开发功能 -->
         <van-empty description="描述文字" />
       </van-tab>
-      
+
       <van-tab title="相关图书">
         <!-- 图书列表组件: 父传子 -->
         <GoodsList :goods="like_goods" />
@@ -54,12 +56,17 @@
 <script>
 import NavBar from '@/components/common/navbar/NavBar'
 import GoodsList from '@/components/content/goods/GoodsList'
+import { Toast } from 'vant'
 
 import { onMounted, ref, reactive, toRefs } from 'vue'
 // 导入路由
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+// 导入状态
+import { useStore } from 'vuex'
 // 导入详情接口函数
 import { getDetail } from '@/network/detail.js'
+// 导入购物车接口函数
+import { addCart } from '@/network/cart.js'
 
 export default {
   // 商品详情页面
@@ -69,7 +76,12 @@ export default {
     GoodsList,
   },
   setup() {
+    // 路由
     const route = useRoute()
+    const router = useRouter()
+    // 状态
+    const store = useStore()
+
     let id = ref(0)
     let active = ref(0)
 
@@ -93,10 +105,44 @@ export default {
         console.log(res.goods.comments)
       })
     })
+
+    // 加入购物车
+    const handleAddCart = () => {
+      // console.log('handleAddCart');
+      addCart({
+        goods_id: book.detail.id,
+        num: 1,
+      }).then((res) => {
+        // 判断状态码
+        if (res.status == '201' || res.status == '204') {
+          // 提示
+          Toast.success('添加成功')
+          // 设置状态中购物车数量: 分发
+          store.dispatch('updateCart')
+        }
+      })
+    }
+    // 立即购买
+    const goToCart = () => {
+      // console.log('goToCart');
+      addCart({
+        goods_id: book.detail.id,
+        num: 1,
+      }).then((res) => {
+        // 判断状态码
+        if (res.status == '201' || res.status == '204') {
+          Toast.success('添加成功,显示购物车')
+          router.push({ path: '/shopcart' })
+        }
+      })
+    }
+
     return {
       id,
       ...toRefs(book),
       active,
+      handleAddCart,
+      goToCart,
     }
   },
 }

@@ -13,7 +13,7 @@
     <router-link to="/shopcart" class="tab-bar-item">
       <div class="icon">
         <!-- 徽标 -->
-        <van-badge :content="0" max="9">
+        <van-badge :content="$store.state.cartCount" max="9">
           <i class="iconfont icon-gouwuchezhengpin"></i>
         </van-badge>
       </div>
@@ -27,6 +27,12 @@
   </div>
   <router-view></router-view>
 </template>
+<script>
+export default {
+  // 根组件
+  name: 'App',
+}
+</script>
 
 <style lang="less">
 // 引入全局样式
