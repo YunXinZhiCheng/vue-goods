@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import store from '../store'
+import { Notify, Toast } from 'vant'
 
 const Home = () => import('../views/home/Home')
 const Category = () => import('../views/category/Category.vue')
@@ -53,6 +55,7 @@ const routes = [
     // 导航守卫
     meta: {
       title: '图书兄弟-购物车',
+      isAuthRequired: true,
     },
   },
   {
@@ -62,6 +65,7 @@ const routes = [
     // 导航守卫
     meta: {
       title: '图书兄弟-个人中心',
+      isAuthRequired: true,
     },
   },
   {
@@ -91,7 +95,14 @@ const router = createRouter({
 //
 router.beforeEach((to, from, next) => {
   // 如果没有登录，在这里到login
-  next()
+  if (to.meta.isAuthRequired && store.state.user.isLogin === false) {
+    // Notify('您还有登录，请先登录')
+    Toast.fail('您还有登录，请先登录')
+    return next('/login')
+  } else {
+    next()
+  }
+
   document.title = to.meta.title
 })
 

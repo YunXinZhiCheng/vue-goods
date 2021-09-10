@@ -68,6 +68,7 @@ import NavBar from '@/components/common/navbar/NavBar'
 import { Notify, Toast } from 'vant'
 import { reactive, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 
 // 导入登录接口函数
 import { Login } from '@/network/user.js'
@@ -79,6 +80,8 @@ export default {
     NavBar,
   },
   setup() {
+    // 状态
+    const store = useStore()
     // 路由
     const router = useRouter()
 
@@ -93,17 +96,20 @@ export default {
     // }
     const onSubmit = () => {
       Login(userinfo).then((res) => {
-        console.log(res.access_token)
+        // console.log(res.access_token)
+
         // 一定会返回一个token，将token保存到本地 window.localStorage
         window.localStorage.setItem('token', res.access_token) // setItem(key,value), getItem(key)
 
         // 在vuex isLoin
+        store.commit('setIsLogin', true)
 
         // 登录提示
         Toast.success('登录成功')
         // 清空信息
         userinfo.email = ''
         userinfo.password = ''
+        // 登录成功后跳转到上一个页面
         setTimeout(() => {
           router.go(-1)
         }, 500)

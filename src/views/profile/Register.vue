@@ -111,8 +111,8 @@ export default {
       // 1.先验证
       if (userinfo.password != userinfo.password_confirmation) {
         // 消息通知组件（局部引入）
-        Notify('两次密码不一致...')
-        // Toast.fail('失败文案');
+        // Notify('两次密码不一致...')
+        Toast.fail('两次密码不一致...');
       } else {
         // 2.再提交给服务器注册
         register(userinfo).then((res) => {
