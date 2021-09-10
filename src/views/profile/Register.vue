@@ -73,7 +73,13 @@
 
 <script>
 import NavBar from '@/components/common/navbar/NavBar'
+import { Notify, Toast } from 'vant'
 import { reactive, ref, toRefs } from 'vue'
+import { useRouter } from 'vue-router'
+
+// 导入注册接口函数
+import { register } from '@/network/user.js'
+
 export default {
   // 注册页面
   name: 'Register',
@@ -81,6 +87,9 @@ export default {
     NavBar,
   },
   setup() {
+    // 路由
+    const router = useRouter()
+
     // 用户注册信息
     const userinfo = reactive({
       name: '',
@@ -89,8 +98,34 @@ export default {
       email: '',
     })
     // 提交方法
-    const onSubmit = (values) => {
-      console.log('submit', values)
+    // const onSubmit = (values) => {
+    //   console.log('submit', values)
+    // }
+    const onSubmit = () => {
+      // 1.先验证
+      if (userinfo.password != userinfo.password_confirmation) {
+        // 消息通知组件（局部引入）
+        Notify('两次密码不一致...')
+        // Toast.fail('失败文案');
+      } else {
+        // 2.再提交给服务器注册
+        register(userinfo).then((res) => {
+          console.log(res)
+          // 判断状态码
+          if (res.status == '201') {
+            Toast.success('注册成功')
+            // 注册成功后跳转到登录页面
+            setTimeout(() => {
+              router.push({
+                path: '/login',
+              })
+            }, 1000)
+          }
+          // 注册之后清空密码
+          userinfo.password = ''
+          userinfo.password_confirmation = ''
+        })
+      }
     }
 
     return {

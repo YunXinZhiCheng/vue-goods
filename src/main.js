@@ -5,7 +5,7 @@ import store from './store'
 
 // 导入Vant样式
 import 'vant/lib/index.css'
-// 导入Vant组件：按需引入 轮播图 懒加载 徽标 侧边导航 折叠面板 标签页 商品卡片 图片 标签 按钮 空状态 表单
+// 导入Vant组件：按需引入 轮播图 懒加载 徽标 侧边导航 折叠面板 标签页 商品卡片 图片 标签 按钮 空状态 表单 轻提示
 
 import {
   Swipe,
@@ -26,6 +26,7 @@ import {
   Form,
   Field,
   CellGroup,
+  Toast,
 } from 'vant'
 
 createApp(App)
@@ -51,4 +52,5 @@ createApp(App)
   .use(Form)
   .use(Field)
   .use(CellGroup)
+  .use(Toast)
   .mount('#app')

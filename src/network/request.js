@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { Notify } from 'vant'
 
 export function request(config) {
   // 创建实例
@@ -27,6 +28,10 @@ export function request(config) {
     (err) => {
       // 如果有需要授权才可以访问的接口，统一去 login 授权
       // 如果有错误，这里面会处理，显示错误信息
+      // console.log('错误信息: '+err.response.data.errors[Object.keys(err.response.data.errors)][0]);
+      Notify(
+        err.response.data.errors[Object.keys(err.response.data.errors)[0]][0]
+      )
     }
   )
 
