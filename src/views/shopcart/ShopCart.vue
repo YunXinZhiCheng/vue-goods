@@ -63,6 +63,7 @@
                 icon="delete"
                 type="danger"
                 class="delete-button"
+                @click="deleteGood(item.id)"
               />
             </template>
           </van-swipe-cell>
@@ -191,6 +192,14 @@ export default {
         state.checkAll = false
       }
     }
+    // 删除购物商品
+    const deleteGood = (id) => {
+      deleteCartItem(id).then((res) => {
+        // 删除后重新初始化数据
+        init()
+        store.dispatch('updateCart') // 改变vuex中的状态数量
+      })
+    }
 
     // 前往购物
     const goTo = () => {
@@ -203,6 +212,7 @@ export default {
       onChange,
       groupChange,
       allCheck,
+      deleteGood,
     }
   },
 }
