@@ -9,7 +9,7 @@ export function addCart(data) {
   })
 }
 
-// 修改购物车（数量） data={num:1}
+// 修改购物车， data = {num:1}
 export function modifyCart(id, data) {
   return request({
     url: `/api/carts/${id}`,
@@ -18,8 +18,8 @@ export function modifyCart(id, data) {
   })
 }
 
-// 选择商品状态, 所有选中的ID
-export function checkedCart(data) {
+//  选择商品的状态 checked,  所有选中的ID
+export function checkedCard(data) {
   return request({
     url: '/api/carts/checked',
     method: 'patch',
@@ -27,15 +27,16 @@ export function checkedCart(data) {
   })
 }
 
-// 获取购物车列表
+//  获取购物车列表
 export function getCart(data = '') {
   return request({
+    // api/carts?include=goods
     url: '/api/carts?' + data,
   })
 }
 
-// 删除购物车
-export function deleteCart(id) {
+//  删除购物车
+export function deleteCartItem(id) {
   return request({
     url: `/api/carts/${id}`,
     method: 'delete',

@@ -28,9 +28,20 @@
   <router-view></router-view>
 </template>
 <script>
+import { onMounted } from 'vue'
+import { useStore } from 'vuex'
+
 export default {
   // 根组件
   name: 'App',
+  setup() {
+    // 状态
+    const store = useStore()
+    onMounted(() => {
+      // 状态分发
+      store.dispatch('updateCart')
+    })
+  },
 }
 </script>
 
