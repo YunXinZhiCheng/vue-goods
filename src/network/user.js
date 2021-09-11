@@ -23,3 +23,10 @@ export function Logout() {
     method: 'post',
   })
 }
+
+// 得到用户信息的数据
+export function getUser(){
+  return request({
+    url:'/api/user'
+  })
+}

@@ -6,7 +6,7 @@ import store from './store'
 // 导入Vant样式
 import 'vant/lib/index.css'
 // 导入Vant组件：按需引入 轮播图 懒加载 徽标 侧边导航 折叠面板 标签页 商品卡片 图片 标签 按钮 空状态 表单 轻提示
-// 复选框 步进器 滑动单元格 提交订单栏
+// 复选框 步进器 滑动单元格 提交订单栏 图标
 import {
   Swipe,
   SwipeItem,
@@ -32,6 +32,7 @@ import {
   Stepper,
   SwipeCell,
   SubmitBar,
+  Icon
 } from 'vant'
 
 createApp(App)
@@ -63,4 +64,5 @@ createApp(App)
   .use(Stepper)
   .use(SwipeCell)
   .use(SubmitBar)
+  .use(Icon)
   .mount('#app')
