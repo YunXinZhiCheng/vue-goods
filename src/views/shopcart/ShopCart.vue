@@ -71,7 +71,13 @@
       </div>
 
       <!-- 购物车结算 -->
-      <van-submit-bar class="submit-all" :price="9999" button-text="结算">
+      <van-submit-bar
+        class="submit-all"
+        :price="total * 100"
+        button-text="结算"
+        @submit="onSubmit"
+      >
+        <!-- 购物车全选按钮 -->
         <van-checkbox @click="allCheck" v-model:checked="checkAll">
           全选
         </van-checkbox>
@@ -95,7 +101,7 @@
 
 <script>
 import NavBar from '@/components/common/navbar/NavBar'
-import { onMounted, ref, reactive, toRefs } from 'vue'
+import { onMounted, ref, reactive, toRefs, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { Toast } from 'vant'
@@ -192,6 +198,7 @@ export default {
         state.checkAll = false
       }
     }
+
     // 删除购物商品
     const deleteGood = (id) => {
       deleteCartItem(id).then((res) => {
@@ -199,6 +206,26 @@ export default {
         init()
         store.dispatch('updateCart') // 改变vuex中的状态数量
       })
+    }
+
+    // 通过计算属性，计算购物商品总价
+    const total = computed(() => {
+      let sum = 0 // 总价
+      state.list
+        .filter((item) => state.result.includes(item.id))
+        .forEach((item) => {
+          sum += parseInt(item.num) * parseFloat(item.goods.price)
+        })
+      return sum // 返回总价
+    })
+
+    // 创建订单
+    const onSubmit = () => {
+      if (state.result.length == 0) {
+        Toast.fail('请选择商品进行结算')
+      } else {
+        router.push({ path: '/createorder' }) // 跳转到创建订单页面
+      }
     }
 
     // 前往购物
@@ -213,6 +240,8 @@ export default {
       groupChange,
       allCheck,
       deleteGood,
+      total,
+      onSubmit,
     }
   },
 }
