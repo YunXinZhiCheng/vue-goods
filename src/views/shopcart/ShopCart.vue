@@ -13,7 +13,12 @@
     <div class="cart-box">
       <!-- 购物车主体 -->
       <div class="cart-body">
-        <van-checkbox-group ref="checkboxGroup">
+        <!-- 复选框组件 -->
+        <van-checkbox-group
+          ref="checkboxGroup"
+          @change="groupChange"
+          v-model="result"
+        >
           <van-swipe-cell
             :right-width="50"
             v-for="(item, index) in list"
@@ -22,7 +27,7 @@
             <!-- 商品项 -->
             <div class="good-item">
               <!-- 商品选中 -->
-              <van-checkbox name=""></van-checkbox>
+              <van-checkbox :name="item.id"></van-checkbox>
               <!-- 商品图片 -->
               <div class="good-img">
                 <img :src="item.goods.cover_url" alt="" />
@@ -35,9 +40,10 @@
                 </div>
                 <div class="good-btn">
                   <div class="price">
-                    ￥
-                    <small>{{ item.goods.price }}</small>
+                    <small>¥</small>
+                    {{ item.goods.price + '.00' }}
                   </div>
+                  <!-- 步进器组件 -->
                   <van-stepper
                     integer
                     :min="1"
@@ -50,7 +56,7 @@
                 </div>
               </div>
             </div>
-            <!-- 模板 -->
+            <!-- 模板:删除按钮 -->
             <template #right>
               <van-button
                 square
@@ -65,7 +71,9 @@
 
       <!-- 购物车结算 -->
       <van-submit-bar class="submit-all" :price="9999" button-text="结算">
-        <van-checkbox>全选</van-checkbox>
+        <van-checkbox @click="allCheck" v-model:checked="checkAll">
+          全选
+        </van-checkbox>
       </van-submit-bar>
 
       <!-- 购物车空状态 -->
@@ -110,7 +118,9 @@ export default {
 
     // 数据模型,状态
     const state = reactive({
-      list: [],
+      list: [], // 购物车列表
+      result: [], // 购物车id数组
+      checkAll: true, // 购物车全选
     })
 
     // 初始化购物车数据
@@ -121,8 +131,14 @@ export default {
         forbidClick: true,
       })
       getCart('include=goods').then((res) => {
-        console.log(res.data) // 获取购物车数据
         state.list = res.data
+        console.log(res.data) // 获取购物车数据
+
+        state.result = res.data
+          .filter((n) => n.is_checked == 1)
+          .map((item) => item.id)
+        // console.log(state.result) // 获取购物车选中数组
+
         Toast.clear()
       })
     }
@@ -150,6 +166,32 @@ export default {
       })
     }
 
+    // 复选框改变处理
+    const groupChange = (result) => {
+      if (result.length == state.list.length) {
+        state.checkAll = true
+      } else {
+        state.checkAll = false
+      }
+
+      console.log(result)
+
+      state.result = result
+      // 改变数据表中选中状态
+      checkedCard({ cart_ids: result })
+    }
+
+    // 全选处理
+    const allCheck = () => {
+      if (!state.checkAll) {
+        state.result = state.list.map((item) => item.id)
+        state.checkAll = true
+      } else {
+        state.result = []
+        state.checkAll = false
+      }
+    }
+
     // 前往购物
     const goTo = () => {
       router.push({ path: '/home' })
@@ -159,6 +201,8 @@ export default {
       ...toRefs(state),
       goTo,
       onChange,
+      groupChange,
+      allCheck,
     }
   },
 }
