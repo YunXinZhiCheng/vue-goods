@@ -6,8 +6,8 @@
     -->
     <div
       class="recommend-item"
-      v-for="item in recommends.slice(0, 4)"
-      :key="item.id"
+      v-for="(item,index) in recommends.slice(0, 4)"
+      :key="index"
     >
       <a href="" @click.prevent="goD(item.id)">
         <!-- 图片懒加载 -->
